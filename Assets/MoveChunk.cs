@@ -5,11 +5,19 @@ using UnityEngine;
 
 public class MoveChunk : MonoBehaviour
 {
-    public float speed=2.0f;
+    private float speed;
+    public GameManager gameManagerInstance;
     private Transform _goTransform;
     private void Start()
     {
+        gameManagerInstance = GameManager.Instance;
         _goTransform = transform;
+        Invoke("GetMoveSpeed",0.2f);
+    }
+
+     void GetMoveSpeed()
+    {
+        speed = gameManagerInstance.GetLevelMoveSpeed();
     }
 
     // Update is called once per frame

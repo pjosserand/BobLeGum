@@ -1,4 +1,3 @@
-using System.Data;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -7,11 +6,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
-    private static UIManager uiManagerInstance;
+    public  UIManager uiManagerInstance;
+    //Arrays of var : each index => Level
+    public int currentLevel;
+    public float[] moveSpeed;
     private int[] _coinsFound;
-    private int[] _coinsMax;
+    public int[] _coinsMax;
     private int numberOfLevels=1;
-    private string _path; 
+    private string _path;
+    private int win;
     
     public static GameManager Instance
     {
@@ -29,17 +32,34 @@ public class GameManager : MonoBehaviour
     {
         _coinsFound = new int[numberOfLevels];
         _coinsMax = new int [numberOfLevels];
-        uiManagerInstance = UIManager.Instance;
+        moveSpeed = new float[numberOfLevels];
+        moveSpeed[0] = 4.0f;
+        uiManagerInstance = UIManager.instance;
+        win = 0;
     }
-    
-    public void FinishLevel()
+
+    public float GetLevelMoveSpeed()
     {
-        uiManagerInstance.DisplayFinishLevelMenu();
+        currentLevel= SceneManager.GetActiveScene().buildIndex -1;
+        return moveSpeed[currentLevel];
+    }
+
+    public void SetUIManager(UIManager newInstance)
+    {
+        uiManagerInstance = newInstance;
     }
     
+    //******************************************Victory Conditions****************************************************//
     public void LooseGame()
     {
-        LoadLevel();
+        win = -1;
+        uiManagerInstance.DisplayFinishLevelMenu(win);
+    }
+
+    public void WinGame()
+    {
+        win = 1;
+        uiManagerInstance.DisplayFinishLevelMenu(win);
     }
     
     public void ExitGame()
@@ -48,16 +68,19 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    //******************************************Load Level****************************************************//
+
     private void LoadInteractiveLevel(int level)
     {
-        Debug.Log("Load Level " + level);
+        win = 0;
         if (Time.timeScale <= 0)
         {
             Time.timeScale = 1.0f;
         }
-
         LoadScene(level);
+        uiManagerInstance = UIManager.instance;
     }
+    
     public void LoadLevel(int level = -1)
     {
         if (level < 0)
@@ -66,10 +89,12 @@ public class GameManager : MonoBehaviour
         }
         else if (level > 0)
         {
+            //Level
             LoadInteractiveLevel(level);
         }
         else
         {
+            //Main Menu
             LoadScene(level);
         }
 
@@ -80,6 +105,8 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(index);
     }
     
+    //******************************************Save System****************************************************//
+
     public void SaveData()
     {
         BinaryFormatter formatter = new BinaryFormatter();

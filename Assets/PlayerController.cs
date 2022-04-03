@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Finish"))
         {
             //Debug.Log("Win");
-            gameManagerInstance.FinishLevel();
+            gameManagerInstance.WinGame();
         }
     }
 }

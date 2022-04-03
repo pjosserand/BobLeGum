@@ -1,20 +1,31 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
 
-    private static UIManager _instance;
-    public GameObject FinishLevelMenu;
-    public GameObject DieLevelMenu;
+    private static GameManager gameManagerInstance;
+    public static UIManager instance;
+    public GameObject finishLevelMenu;
+    public TextMeshProUGUI txtFinishLevelMenu;
+    private string winMsg = "TU AS GAGNE !";
+    private string loseMsg = "TU AS PERDU !";
     
-    public static UIManager Instance
-    {
-        get { return _instance ? _instance : (_instance = new GameObject("[UIManager]").AddComponent<UIManager>());} 
-        private set{ _instance = value;} 
-    }
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
+        if (instance == this  && instance == null)
+        {
+            Destroy(gameObject);
+        }
+
+        instance = this;
+    }
+
+    private void Start()
+    {
+        gameManagerInstance = GameManager.Instance;
+        gameManagerInstance.SetUIManager(this);
     }
 
     void DisplayMenu(GameObject go)
@@ -27,14 +38,21 @@ public class UIManager : MonoBehaviour
         go.SetActive(false);   
     }
     
-    public void DisplayFinishLevelMenu()
+    public void DisplayFinishLevelMenu(int win)
     {
-        Time.timeScale = 0.0f;
-        DisplayMenu(FinishLevelMenu);
-    }
-    
-    void HideFinishLevelMenu()
-    {
-        DisplayMenu(FinishLevelMenu);
+        if (finishLevelMenu != null)
+        {
+            if (win > 0)
+            {
+                txtFinishLevelMenu.SetText(winMsg);
+            }
+            else
+            {
+                txtFinishLevelMenu.SetText(loseMsg);
+            }
+            Time.timeScale = 0.0f;
+            //Display FinishLevelMenu
+            DisplayMenu(finishLevelMenu);
+        }
     }
 }
