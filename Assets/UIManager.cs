@@ -27,17 +27,19 @@ public class UIManager : MonoBehaviour
         gameManagerInstance = GameManager.Instance;
         gameManagerInstance.SetUIManager(this);
     }
-
-    void DisplayMenu(GameObject go)
-    {
-        go.SetActive(true);
-    }
-
-    void HideMenu(GameObject go)
-    {
-        go.SetActive(false);   
-    }
     
+    public void Pause(bool pause)
+    {
+        if (pause)
+        {
+            Time.timeScale = 0.0f;
+        }
+        else
+        {
+            Time.timeScale = 1.0f;
+        }
+    }
+
     public void DisplayFinishLevelMenu(int win)
     {
         if (finishLevelMenu != null)
@@ -51,8 +53,7 @@ public class UIManager : MonoBehaviour
                 txtFinishLevelMenu.SetText(loseMsg);
             }
             Time.timeScale = 0.0f;
-            //Display FinishLevelMenu
-            DisplayMenu(finishLevelMenu);
+            finishLevelMenu.SetActive(true);
         }
     }
 }
