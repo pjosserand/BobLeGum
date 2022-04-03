@@ -17,13 +17,18 @@ public class GameManager : MonoBehaviour
 
     public void PlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public void ExitGame()
     {
         Debug.Log("Exit Application");
         Application.Quit();
+    }
+    
+    public void LoadLevel(int level)
+    {
+        SceneManager.LoadScene(level);
     }
     
     // Start is called before the first frame update
