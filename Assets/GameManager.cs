@@ -7,17 +7,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
+    private static UIManager uiManagerInstance;
     private int[] _coinsFound;
     private int[] _coinsMax;
     private int numberOfLevels=1;
     private string _path; 
-    public GameObject uiFinishLevel;
-
-
     
     public static GameManager Instance
     {
-        get { return _instance ? _instance : (_instance = new GameObject("GameManager").AddComponent<GameManager>());} 
+        get { return _instance ? _instance : (_instance = new GameObject("[GameManager]").AddComponent<GameManager>());} 
         private set{ _instance = value;} 
     }
 
@@ -31,19 +29,12 @@ public class GameManager : MonoBehaviour
     {
         _coinsFound = new int[numberOfLevels];
         _coinsMax = new int [numberOfLevels];
-        var temp = GameObject.Find("Canvas");
-        uiFinishLevel = temp.transform.GetChild(0).gameObject ;
+        uiManagerInstance = UIManager.Instance;
     }
-
+    
     public void FinishLevel()
     {
-        //Save Data
-        //Display Finish LevelMenu
-        if (uiFinishLevel != null)
-        {
-            uiFinishLevel.SetActive(true);
-            Time.timeScale = 0f;
-        }
+        uiManagerInstance.DisplayFinishLevelMenu();
     }
     
     public void LooseGame()
@@ -56,21 +47,32 @@ public class GameManager : MonoBehaviour
         //Debug.Log("Exit Application");
         Application.Quit();
     }
-    
-    public void LoadLevel(int level=-1)
+
+    private void LoadInteractiveLevel(int level)
     {
-        if (level >= 0)
+        Debug.Log("Load Level " + level);
+        if (Time.timeScale <= 0)
         {
-            LoadScene(level);
+            Time.timeScale = 1.0f;
+        }
+
+        LoadScene(level);
+    }
+    public void LoadLevel(int level = -1)
+    {
+        if (level < 0)
+        {
+            LoadInteractiveLevel(SceneManager.GetActiveScene().buildIndex);
+        }
+        else if (level > 0)
+        {
+            LoadInteractiveLevel(level);
         }
         else
         {
-            if (Time.timeScale <= 0)
-            {
-                Time.timeScale = 1.0f;
-            }
-            LoadScene(SceneManager.GetActiveScene().buildIndex);
+            LoadScene(level);
         }
+
     }
 
     private void LoadScene(int index)
