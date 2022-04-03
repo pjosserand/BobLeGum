@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EndlessMap : MonoBehaviour
 {
-    public float _speed;
+    public float speed;
     public GameObject prefab;
     public float width=1.0f;
 
@@ -19,11 +19,10 @@ public class EndlessMap : MonoBehaviour
     }
     void Update()
     {
-        transform.position = transform.position + new Vector3(-1 * _speed * Time.deltaTime, 0.0f, 0);
+        transform.position = transform.position + new Vector3(-1 * speed * Time.deltaTime, 0.0f, 0);
     }
     public void DrawNewGround()
     {
-        Debug.Log("Draw new ground");
         GameObject oldGround = queue.Dequeue();
         oldGround.transform.position += new Vector3(width / 2, 0, 0);
         queue.Enqueue(oldGround);

@@ -5,15 +5,16 @@ using UnityEngine;
 
 public class MoveChunk : MonoBehaviour
 {
-    public float _speed=2.0f;
-
+    public float speed=2.0f;
+    private Transform _goTransform;
     private void Start()
     {
+        _goTransform = transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = transform.position + new Vector3(-1 * _speed * Time.deltaTime, 0.0f, 0);
+        _goTransform.position = _goTransform.position + new Vector3(-1 * speed * Time.deltaTime, 0.0f, 0);
     }
 }

@@ -3,15 +3,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static GameManager gameManagerInstance;
     private Rigidbody2D _rb;
     private float _runSpeed;
     private bool _onTop;
     private float _direction;
+    private bool canMove;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
       _rb = GetComponent<Rigidbody2D>();
       _onTop = false;
+      gameManagerInstance = GameManager.Instance;
     }
 
     // Update is called once per frame
@@ -52,12 +57,15 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Foe"))
         {
-            Debug.Log("Loose");
+            //Debug.Log("Loose");
+            gameManagerInstance.LooseGame();
+
         }
 
         if (other.CompareTag("Finish"))
         {
-            Debug.Log("Win");
+            //Debug.Log("Win");
+            gameManagerInstance.FinishLevel();
         }
     }
 }
