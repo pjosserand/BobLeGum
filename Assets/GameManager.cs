@@ -10,11 +10,10 @@ public class GameManager : MonoBehaviour
     //Arrays of var : each index => Level
     public int currentLevel;
     public float[] moveSpeed;
-    private int[] _coinsFound;
-    public int[] _coinsMax;
     private int numberOfLevels=1;
     private string _path;
     private int win;
+    private int score;
     
     public static GameManager Instance
     {
@@ -30,8 +29,6 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _coinsFound = new int[numberOfLevels];
-        _coinsMax = new int [numberOfLevels];
         moveSpeed = new float[numberOfLevels];
         moveSpeed[0] = 4.0f;
         uiManagerInstance = UIManager.instance;
@@ -77,6 +74,8 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 1.0f;
         }
+
+        score = 0;
         LoadScene(level);
         uiManagerInstance = UIManager.instance;
     }
@@ -106,7 +105,7 @@ public class GameManager : MonoBehaviour
     }
     
     //******************************************Save System****************************************************//
-
+    /*
     public void SaveData()
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -135,8 +134,13 @@ public class GameManager : MonoBehaviour
         {
             return false;
         }
+    }*/
+    //******************************************Score System****************************************************//
+    public void addToScore(int newScore)
+    {
+        score += newScore;
+        uiManagerInstance.UpdateScore(score);
     }
-
 
     // Update is called once per frame
     void Update()

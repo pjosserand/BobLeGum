@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     private bool _onTop;
     private float _direction;
     private bool canMove;
-    
+    private int newScore;
     
     // Start is called before the first frame update
     void Start()
@@ -55,11 +55,20 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(other.tag);
         if (other.CompareTag("Foe"))
         {
             //Debug.Log("Loose");
             gameManagerInstance.LooseGame();
 
+        }
+
+        if (other.CompareTag("Coin"))
+        {
+            Debug.Log("Coin collected");
+            other.gameObject.SetActive(false);
+            newScore = other.gameObject.GetComponent<CoinScript>().GetScore();
+            gameManagerInstance.addToScore(newScore);
         }
 
         if (other.CompareTag("Finish"))

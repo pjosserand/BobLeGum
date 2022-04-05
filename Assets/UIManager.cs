@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     public GameObject finishLevelMenu;
     public TextMeshProUGUI txtFinishLevelMenu;
+    public TextMeshProUGUI txtScore;
     private string winMsg = "TU AS GAGNE !";
     private string loseMsg = "TU AS PERDU !";
     
@@ -26,6 +27,12 @@ public class UIManager : MonoBehaviour
     {
         gameManagerInstance = GameManager.Instance;
         gameManagerInstance.SetUIManager(this);
+        txtScore.SetText("0");
+    }
+
+    public void UpdateScore(int newScore)
+    {
+        txtScore.SetText(newScore.ToString());
     }
     
     public void Pause(bool pause)
