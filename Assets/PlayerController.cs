@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     {
       _rb = GetComponent<Rigidbody2D>();
       _onTop = false;
-      gameManagerInstance = GameManager.Instance;
+      gameManagerInstance = GameManager._instance;
     }
 
     // Update is called once per frame
@@ -55,20 +55,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.tag);
         if (other.CompareTag("Foe"))
         {
             //Debug.Log("Loose");
             gameManagerInstance.LooseGame();
-
         }
 
         if (other.CompareTag("Coin"))
         {
-            Debug.Log("Coin collected");
+            //Debug.Log("Coin collected");
             other.gameObject.SetActive(false);
             newScore = other.gameObject.GetComponent<CoinScript>().GetScore();
-            gameManagerInstance.addToScore(newScore);
+            gameManagerInstance.AddToScore(newScore);
         }
 
         if (other.CompareTag("Finish"))

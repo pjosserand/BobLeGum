@@ -45,6 +45,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiManagerInstance: {fileID: 0}
   currentLevel: 0
-  moveSpeed:
-  - 3
-  _coinsMax: 00000000
+  levelsData: {fileID: 11400000, guid: 11465ff1c59ea0846921e62443d17626, type: 2}

@@ -2,61 +2,60 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance;
+    public static GameManager _instance;
     public  UIManager uiManagerInstance;
     //Arrays of var : each index => Level
     public int currentLevel;
-    public float[] moveSpeed;
-    private int numberOfLevels=1;
+    public LevelsData levelsData;
     private string _path;
-    private int win;
-    private int score;
+    private int _win;
+    private int _currentScore;
     
-    public static GameManager Instance
+   /* public static GameManager Instance
     {
-        get { return _instance ? _instance : (_instance = new GameObject("[GameManager]").AddComponent<GameManager>());} 
-        private set{ _instance = value;} 
-    }
+      /*  get { return _instance ? _instance : (_instance = new GameObject("[GameManager]").AddComponent<GameManager>());} 
+        private set{ _instance = value;} */
 
     void Awake(){
         _path = Application.persistentDataPath + "/player.data";
+        if (_instance != this && _instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        _instance = this;
         DontDestroyOnLoad(gameObject);
     }
     
     // Start is called before the first frame update
     void Start()
     {
-        moveSpeed = new float[numberOfLevels];
-        moveSpeed[0] = 4.0f;
+        _win = 0;
         uiManagerInstance = UIManager.instance;
-        win = 0;
+        uiManagerInstance.DisplayLevelButtons(levelsData); 
     }
-
+    
     public float GetLevelMoveSpeed()
     {
         currentLevel= SceneManager.GetActiveScene().buildIndex -1;
-        return moveSpeed[currentLevel];
+        return levelsData.levels[currentLevel].lMoveSpeed;
     }
 
-    public void SetUIManager(UIManager newInstance)
-    {
-        uiManagerInstance = newInstance;
-    }
-    
     //******************************************Victory Conditions****************************************************//
     public void LooseGame()
     {
-        win = -1;
-        uiManagerInstance.DisplayFinishLevelMenu(win);
+        _win = -1;
+        uiManagerInstance.DisplayFinishLevelMenu(_win);
     }
 
     public void WinGame()
     {
-        win = 1;
-        uiManagerInstance.DisplayFinishLevelMenu(win);
+        _win = 1;
+        uiManagerInstance.DisplayFinishLevelMenu(_win);
     }
     
     public void ExitGame()
@@ -69,39 +68,48 @@ public class GameManager : MonoBehaviour
 
     private void LoadInteractiveLevel(int level)
     {
-        win = 0;
+        _win = 0;
         if (Time.timeScale <= 0)
         {
             Time.timeScale = 1.0f;
         }
 
-        score = 0;
+        SaveScore();
         LoadScene(level);
-        uiManagerInstance = UIManager.instance;
     }
+    
     
     public void LoadLevel(int level = -1)
     {
         if (level < 0)
         {
             LoadInteractiveLevel(SceneManager.GetActiveScene().buildIndex);
+            //Invoke("ResetScore",0.2f);
+
         }
         else if (level > 0)
         {
             //Level
             LoadInteractiveLevel(level);
+            //Invoke("ResetScore",0.2f);
         }
         else
         {
             //Main Menu
             LoadScene(level);
+            Time.timeScale = 1.0f;
+            Invoke("CallLevelButtons",0.2f);
         }
-
     }
 
+    public void CallLevelButtons()
+    {
+        uiManagerInstance.DisplayLevelButtons(levelsData);
+    }
     private void LoadScene(int index)
     {
         SceneManager.LoadScene(index);
+        uiManagerInstance = UIManager.instance;
     }
     
     //******************************************Save System****************************************************//
@@ -124,7 +132,7 @@ public class GameManager : MonoBehaviour
             PlayerData data = formatter.Deserialize(stream) as PlayerData;
             if (data != null)
             {
-                _coinsFound = data.coinsFound;
+                _coinsFou0nd = data.coinsFound;
                 _coinsMax = data.coinsMax;
             }
             stream.Close();
@@ -136,10 +144,22 @@ public class GameManager : MonoBehaviour
         }
     }*/
     //******************************************Score System****************************************************//
-    public void addToScore(int newScore)
+    public void AddToScore(int newScore)
     {
-        score += newScore;
-        uiManagerInstance.UpdateScore(score);
+        _currentScore += newScore;
+        uiManagerInstance.UpdateScore(_currentScore);
+    }
+
+    public void ResetScore()
+    {
+        if (uiManagerInstance == null) return;
+        uiManagerInstance.UpdateScore(0);
+    }
+
+    private void SaveScore()
+    {
+        levelsData.levels[currentLevel].lCurrentScore = _currentScore;
+        _currentScore = 0;
     }
 
     // Update is called once per frame

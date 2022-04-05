@@ -11,6 +11,7 @@ public class LevelsData : ScriptableObject
     public class Level
     {
         public string lName;
+        public float lMoveSpeed;
         public int lCurrentScore;
         public int lMaxScore;
     }
