@@ -4,7 +4,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
 
-    public static UIManager instance;
+    public static UIManager Instance;
     //UI MainMenu
     public GameObject levelButtonPrefab;
     public GameObject panel;
@@ -13,17 +13,17 @@ public class UIManager : MonoBehaviour
     public GameObject finishLevelMenu;
     public TextMeshProUGUI txtFinishLevelMenu;
     public TextMeshProUGUI txtScore;
-    private string winMsg = "TU AS GAGNE !";
-    private string loseMsg = "TU AS PERDU !";
+    private string _winMsg = "TU AS GAGNE !";
+    private string _loseMsg = "TU AS PERDU !";
 
     private void Awake()
     {
-        if (instance != this && instance != null)
+        if (Instance != this && Instance != null)
         {
             Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
@@ -72,14 +72,7 @@ public class UIManager : MonoBehaviour
 
     public void Pause(bool pause)
     {
-        if (pause)
-        {
-            Time.timeScale = 0.0f;
-        }
-        else
-        {
-            Time.timeScale = 1.0f;
-        }
+        Time.timeScale = pause ? 0.0f : 1.0f;
     }
 
     public void DisplayFinishLevelMenu(int win)
@@ -91,14 +84,7 @@ public class UIManager : MonoBehaviour
             txtFinishLevelMenu = finishLevelMenu.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
         }
 
-        if (win > 0)
-        {
-            txtFinishLevelMenu.SetText(winMsg);
-        }
-        else
-        {
-            txtFinishLevelMenu.SetText(loseMsg);
-        }
+        txtFinishLevelMenu.SetText(win > 0 ? _winMsg : _loseMsg);
 
         Time.timeScale = 0.0f;
         finishLevelMenu.SetActive(true);

@@ -10,7 +10,7 @@ public class MoveChunk : MonoBehaviour
     private Transform _goTransform;
     private void Start()
     {
-        gameManagerInstance = GameManager._instance;
+        gameManagerInstance = GameManager.Instance;
         _goTransform = transform;
         Invoke("GetMoveSpeed",0.2f);
     }

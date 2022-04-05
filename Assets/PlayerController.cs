@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     {
       _rb = GetComponent<Rigidbody2D>();
       _onTop = false;
-      gameManagerInstance = GameManager._instance;
+      gameManagerInstance = GameManager.Instance;
     }
 
     // Update is called once per frame
