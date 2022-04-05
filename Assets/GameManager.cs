@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     public LevelsData levelsData;
     private string _path;
     private int _win;
-    private int _currentScore;
+    private int _currentScore = 0;
     
    /* public static GameManager Instance
     {
@@ -50,12 +50,14 @@ public class GameManager : MonoBehaviour
     {
         _win = -1;
         uiManagerInstance.DisplayFinishLevelMenu(_win);
+        ResetScore();
     }
 
     public void WinGame()
     {
         _win = 1;
         uiManagerInstance.DisplayFinishLevelMenu(_win);
+        SaveScore();
     }
     
     public void ExitGame()
@@ -74,7 +76,6 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1.0f;
         }
 
-        SaveScore();
         LoadScene(level);
     }
     
@@ -84,14 +85,11 @@ public class GameManager : MonoBehaviour
         if (level < 0)
         {
             LoadInteractiveLevel(SceneManager.GetActiveScene().buildIndex);
-            //Invoke("ResetScore",0.2f);
-
         }
         else if (level > 0)
         {
             //Level
             LoadInteractiveLevel(level);
-            //Invoke("ResetScore",0.2f);
         }
         else
         {
@@ -146,14 +144,15 @@ public class GameManager : MonoBehaviour
     //******************************************Score System****************************************************//
     public void AddToScore(int newScore)
     {
+        Debug.Log("_currentScore :" + _currentScore);
+        Debug.Log("newScore :" + newScore);
         _currentScore += newScore;
         uiManagerInstance.UpdateScore(_currentScore);
     }
 
     public void ResetScore()
     {
-        if (uiManagerInstance == null) return;
-        uiManagerInstance.UpdateScore(0);
+        _currentScore = 0;
     }
 
     private void SaveScore()

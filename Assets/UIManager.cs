@@ -23,7 +23,6 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         instance = this;
         DontDestroyOnLoad(gameObject);
     }
@@ -47,11 +46,8 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < levelsData.levels.Count; i++)
         {
             var currentLevel = levelsData.levels[i];
-            Debug.Log(panel);
             newLvlBtn = Instantiate(levelButtonPrefab,panel.transform.GetChild(0));
-            Debug.Log(newLvlBtn.transform);
             newTxt = newLvlBtn.transform.GetChild(0).GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-            //Debug.Log(newTxt);
             newTxt.SetText(currentLevel.lName);
             scoreTxtParent = newLvlBtn.transform.GetChild(1).GetChild(0);
             newTxt = scoreTxtParent.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
